@@ -1,0 +1,73 @@
+People = parcellockerfinder:generatePeople(10000).
+[{person,4913,4369},
+ {person,7025,6247},
+ {person,4262,9562},
+ {person,2768,6308},
+ {person,7437,2741},
+ {person,4042,5661},
+ {person,6026,2153},
+ {person,457,2616},
+ {person,2357,5878},
+ {person,7006,7822},
+ {person,4434,4337},
+ {person,9552,6853},
+ {person,8936,8898},
+ {person,7471,8649},
+ {person,3013,3573},
+ {person,4714,5193},
+ {person,5459,906},
+ {person,4546,7864},
+ {person,9945,7998},
+ {person,627,4864},
+ {person,1399,7856},
+ {person,7336,8520},
+ {person,9989,5035},
+ {person,6485,6106},
+ {person,1019,1271},
+ {person,8139,5933},
+ {person,8432,...},
+ {person,...},
+ {...}|...]
+
+-------------------------------
+ Lockers = parcellockerfinder:generateLockers(1000). 
+[{locker,7011,9147},
+ {locker,9610,8440},
+ {locker,6447,8905},
+ {locker,213,2474},
+ {locker,7734,3844},
+ {locker,5641,3814},
+ {locker,9175,3258},
+ {locker,1779,8308},
+ {locker,4215,18},
+ {locker,536,2571},
+ {locker,9175,2812},
+ {locker,474,3812},
+ {locker,6990,2218},
+ {locker,9430,8868},
+ {locker,556,7668},
+ {locker,5599,4476},
+ {locker,1229,9693},
+ {locker,580,1940},
+ {locker,5334,2261},
+ {locker,759,8854},
+ {locker,6514,9809},
+ {locker,105,2447},
+ {locker,1523,7909},
+ {locker,4482,9653},
+ {locker,5029,2312},
+ {locker,6714,6469},
+ {locker,2120,...},
+ {locker,...},
+ {...}|...]
+-------------------------------
+parcellockerfinder:compareSpeed(People,Lockers).
+The time to find the answer sequentially is 3.031s
+The time to find the answer parallelly is 1.516s
+The time to find the answer less parallelly is 0.688s
+ok
+
+INFO
+10000 osób, 1000 lokalizacji paczkomatów
+4 rdzenie -> 4 procesy równoległe
+Czasy widoczne powyżej

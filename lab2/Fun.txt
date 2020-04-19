@@ -1,0 +1,13 @@
+1. MyMap = fun (Fun,List) -> [Fun(X) || X<-List] end. 
+   MyFilter = fun (Fun,List) -> [X || X <- List, Fun(X)] end.
+
+np. MyMap ( fun(X) -> X*X end, [1,2,3,4,5]).
+    MyFilter ( fun(X) -> X rem 3 == 0 end, [1,2,3,4,5]).
+
+
+2. CountDigits = fun (Number) -> 
+	lists:foldl(fun(X,Sum) -> X + Sum - $0 end,0,integer_to_list(Number)) end.
+
+3. lists:filter(fun(X) -> 
+	CountDigits(X) rem 3 == 0 end, [rand:uniform(1000000) || _ <- lists:seq(1, 1000000)]).
+	

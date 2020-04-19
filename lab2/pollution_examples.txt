@@ -1,0 +1,137 @@
+--- Tworze nowy monitor ---
+P = pollution:createMonitor().
+[]
+
+--- Tworze nową stację Rybnik ---
+P1 = pollution:addStation("Rybnik",{50.1022,18.5463},P).
+[{"Rybnik",
+  {50.1022,18.5463},
+  {set,0,16,16,8,80,48,
+       {[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},
+       {{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],...}}}}]
+
+--- Tworze nową stację Krakow ---
+P2 = pollution:addStation("Krakow",{50.0647,19.9450},P1).
+[{"Krakow",
+  {50.0647,19.945},
+  {set,0,16,16,8,80,48,
+       {[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},
+       {{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],...}}}},
+ {"Rybnik",
+  {50.1022,18.5463},
+  {set,0,16,16,8,80,48,
+       {[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},
+       {{[],[],[],[],[],[],[],[],[],[],[],[],[],[],...}}}}]
+
+--- Dodaje pewne wpisy do stacji Rybnik ---
+P3 = pollution:addValue("Rybnik",calendar:local_time(),"Temp",10,P2).
+...
+P4 = pollution:addValue("Rybnik",calendar:local_time(),"Temp",-25,P3).
+...
+P5 = pollution:addValue("Rybnik",calendar:local_time(),"PM10",100,P4).
+...
+P6 = pollution:addValue("Rybnik",calendar:local_time(),"PM10",500,P5).
+[{"Rybnik",
+  {50.1022,18.5463},
+  {set,4,16,16,8,80,48,
+       {[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},
+       {{[],[],[],[],[],[],[],[],
+         [{"PM10",500,{{2020,...},{...}}},{"Temp",-25,{{...},...}}],
+         [{"Temp",10,{{...},...}}],
+         [],[],
+         [{[...],...}],
+         [],[],...}}}},
+ {"Krakow",
+  {50.0647,19.945},
+  {set,0,16,16,8,80,48,
+       {[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},
+       {{[],[],[],[],[],[],[],[],[],[],[],[],[],[],...}}}}]
+
+--- Dodaje pewne wpisy do stacji Krakow ---
+P7 = pollution:addValue("Krakow",calendar:local_time(),"PM10",125,P6).
+P8 = pollution:addValue("Krakow",calendar:local_time(),"PM10",1000,P7).
+P9 = pollution:addValue("Krakow",calendar:local_time(),"Temp",2,P8).   
+P10 = pollution:addValue("Krakow",calendar:local_time(),"Temp",-10,P9).
+[{"Krakow",
+  {50.0647,19.945},
+  {set,4,16,16,8,80,48,
+       {[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},
+       {{[{"PM10",125,{{2020,3,28},{11,23,35}}}],
+         [],[],[],[],[],[],[],[],[],[],
+         [{"PM10",1000,...}],
+         [],[],[],...}}}},
+ {"Rybnik",
+  {50.1022,18.5463},
+  {set,4,16,16,8,80,48,
+       {[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},
+       {{[],[],[],[],[],[],[],[],
+         [{"PM10",500,{{...},...}},{"Temp",-25,{...}}],
+         [{"Temp",10,{...}}],
+         [],[],
+         [{...}],
+         [],...}}}}]
+
+--- Uzywam bonusowej funkcji ode mnie GetInfoStation oraz
+    GetDailyInfoStation do sprawdzenia czy wpisy przeszły (powinno byc po 4) ---
+pollution:getInfoStation("Rybnik",P10).
+Now printing all measurements on station Rybnik
+{"Temp",-25,{{2020,3,28},{11,21,9}}}
+{"PM10",500,{{2020,3,28},{11,21,49}}}
+{"Temp",10,{{2020,3,28},{11,20,6}}}
+{"PM10",100,{{2020,3,28},{11,21,32}}}
+{ok}
+
+pollution:getDailyInfoStation("Krakow",{2020,3,28},P10).
+Now printing all measurements on station Krakow on date {2020,3,28}
+{"PM10",125,{{2020,3,28},{11,23,35}}}
+{"PM10",1000,{{2020,3,28},{11,23,44}}}
+{"Temp",2,{{2020,3,28},{11,24,8}}}
+{"Temp",-10,{{2020,3,28},{11,24,26}}}
+{ok}
+
+
+--- Przykład działania funkcji getParameterAmplitude (amplitudy powinny byc 35 oraz 12) ---
+pollution:getParameterAmplitude({50.1022,18.5463},"Temp",P10).
+{{"Amplitude",35},
+ {"Max Value",10,{{2020,3,28},{11,20,6}}},
+ {"Min Value",-25,{{2020,3,28},{11,21,9}}}}
+
+pollution:getParameterAmplitude("Krakow","Temp",P10).
+{{"Amplitude",12},
+ {"Max Value",2,{{2020,3,28},{11,24,8}}},
+ {"Min Value",-10,{{2020,3,28},{11,24,26}}}}
+
+--- Przykład działania funkcji getDailyMean (dla PM10 średnia to 431.25, dla temp to -5.75) ---
+pollution:getDailyMean({2020,3,28},"PM10",P10).
+431.25
+
+pollution:getDailyMean({2020,3,28},"Temp",P10).      
+-5.75
+
+--- Przykład działania funkcji getStationMean (PM10 w Rybniku to 300, Temp w Krakowie to -4) ---
+pollution:getStationMean("Krakow","Temp",P10).
+-4.0
+
+pollution:getStationMean("Rybnik","PM10",P10).
+300.0
+
+--- Przykład działania funkcji getOneValue (dla Rybnika szukana temp to -25 a dla Krakowa -10) ---
+pollution:getOneValue("Rybnik",{{2020,3,28},{11,21,9}},"Temp",P10).
+-25
+
+73> pollution:getOneValue("Krakow",{{2020,3,28},{11,24,26}},"Temp",P10).
+-10
+
+--- Przykład działania funkcji removeValue (usuwam 3 z Rybnika, powinien zostac 1 pomiar) ---
+P11 = pollution:removeValue("Rybnik",{{2020,3,28},{11,21,9}},"Temp",P10).
+...
+P12 = pollution:removeValue("Rybnik",{{2020,3,28},{11,20,6}},"Temp",P11).
+...
+P13 = pollution:removeValue("Rybnik",{{2020,3,28},{11,21,49}},"PM10",P12).
+...
+pollution:getInfoStation("Rybnik",P13).
+Now printing all measurements on station Rybnik
+{"PM10",100,{{2020,3,28},{11,21,32}}}
+{ok}
+
+--- Dziękuje ---
