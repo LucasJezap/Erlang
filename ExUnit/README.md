@@ -1,7 +1,6 @@
 # Projekt
-
-**TODO: Add description**
-
+https://www.dropbox.com/s/1s11a5q8j6ew46u/project_watermark.mp4?dl=0  
+  
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
